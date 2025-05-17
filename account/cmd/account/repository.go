@@ -3,7 +3,6 @@ package account
 import (
 	"context"
 	"database/sql"
-	"github.com/lib/pq"
 )
 
 type Repository interface {
@@ -29,6 +28,10 @@ func NewPostgresRepository(url string) (Repository, error) {
 	}
 
 	return &postgresRepository{db}, nil
+}
+
+func (r *postgresRepository) Close() {
+	r.db.Close()
 }
 
 func (r *postgresRepository) Ping() error {
@@ -58,17 +61,17 @@ func (r *postgresRepository) ListAccounts(ctx context.Context, skip uint64, take
 		return nil, err
 	}
 	defer rows.Close()
-	 accounts := []Account{}
+	accounts := []Account{}
 
-	 for rows.Next() {
+	for rows.Next() {
 		a := &Account{}
 		if err = rows.Scan(&a.ID, &a.Name); err == nil {
 			accounts = append(accounts, *a)
 		}
-	 }
+	}
 
-	 if err = rows.Err(); err != nil{
+	if err = rows.Err(); err != nil {
 		return nil, err
-	 }
-	 return accounts, nil
+	}
+	return accounts, nil
 }
