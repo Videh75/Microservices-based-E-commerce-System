@@ -1,3 +1,5 @@
+// Business Logic Layer. Wraps repository and handles logic.
+
 package account
 
 import (
@@ -17,18 +19,20 @@ type Account struct {
 	Name string `json:"name"`
 }
 
+// Holds the Repository
 type accountService struct {
 	repository Repository
 }
 
-func newService(r Repository) Service {
+// Returns a new Service
+func NewService(r Repository) Service {
 	return &accountService{r}
 }
 
 func (s *accountService) PostAccount(ctx context.Context, name string) (*Account, error) {
 	a := &Account{
 		Name: name,
-		ID:   ksuid.New().String(),
+		ID:   ksuid.New().String(), // Generates a globally unique, timestamp-ordered ID for the account
 	}
 	if err := s.repository.PutAccount(ctx, *a); err != nil {
 		return nil, err
@@ -41,6 +45,8 @@ func (s *accountService) GetAccount(ctx context.Context, id string) (*Account, e
 }
 
 func (s *accountService) GetAccounts(ctx context.Context, skip uint64, take uint64) ([]Account, error) {
+	// If the client asks for more than 100 accounts in one call, we limit it to 100 to avoid overwhelming the database or network.
+	// If the client sends nothing (no pagination input), we assume they want the first page of results. So, we default to returning the first 100 accounts.
 	if take > 100 || (skip == 0 && take == 0) {
 		take = 100
 	}
