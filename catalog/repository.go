@@ -1,3 +1,4 @@
+// handles all the database operations
 package catalog
 
 import (
@@ -18,7 +19,7 @@ type Repository interface {
 	GetProductByID(ctx context.Context, id string) (*Product, error)
 	ListProducts(ctx context.Context, skip uint64, take uint64) ([]Product, error)
 	ListProductWithIDs(ctx context.Context, ids []string) ([]Product, error)
-	SearchProducts(ctx context.Context, query string, skip uint64, take uint64) (*Product, error)
+	SearchProducts(ctx context.Context, query string, skip uint64, take uint64) ([]Product, error)
 }
 
 // implementation of the Repository interface using Elasticsearch
@@ -125,7 +126,7 @@ func (r *elasticRepository) ListProducts(ctx context.Context, skip uint64, take 
 // NewMultiGetItem creates an item request for a single doc
 // MultiGet batches all item requests in one network call
 // .Add accepts variadic args, so we use items... to unpack the slice
-func (r *elasticRepository) ListProductWithIDs(ctx context.Context, ids []string, skip uint64, take uint64) ([]Product, error) {
+func (r *elasticRepository) ListProductWithIDs(ctx context.Context, ids []string) ([]Product, error) {
 	items := []*elastic.MultiGetItem{}
 	for _, id := range ids {
 		items = append(
