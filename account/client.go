@@ -16,8 +16,10 @@ type Client struct {
 }
 
 // lets other services talk to the gRPC server.
+// grpc.Dial() creates a gRPC connection (without TLS)
+// WithInsecure() disables TLS (Transport Layer Security).
 func NewClient(url string) (*Client, error) {
-	conn, err := grpc.Dial(url, grpc.WithInsecure()) // Creates a gRPC connection (without TLS).
+	conn, err := grpc.Dial(url, grpc.WithInsecure())
 	if err != nil {
 		return nil, err
 	}

@@ -1,10 +1,14 @@
-// Defines what the service exposes.
+// Defines what the service exposes:
+// Messages (data structures) exchanged between client and server
+// gRPC service (RPC interface) with methods like PostAccount, GetAccount, GetAccounts
+// 1, 2, 3,.. are unique field numbers to identify fields in the serialized (binary) format.
+// repeated = zero or more values.
 
-syntax = "proto3";
+syntax = "proto3"; // follows the proto3 syntax
 
 package pb;
 
-option go_package = "./";
+option go_package = "./"; // generate Go files in the current directory.
 
 message Account {
     string id = 1;
