@@ -65,6 +65,8 @@ func (r *postgresRepository) GetAccountByID(ctx context.Context, id string) (*Ac
 }
 
 // Returns a paginated list of accounts
+// rows.Next() moves the cursor to the next row in the result set.
+// rows.Scan() reads the current row's column values into variables.
 func (r *postgresRepository) ListAccounts(ctx context.Context, skip uint64, take uint64) ([]Account, error) {
 	rows, err := r.db.QueryContext(ctx, "SELECT id, name FROM accounts ORDER BY id DESC OFFSET $1 LIMIT $2", skip, take)
 	if err != nil {
