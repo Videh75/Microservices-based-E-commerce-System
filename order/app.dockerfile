@@ -1,15 +1,50 @@
-FROM golang:1.13-alpine3.11 AS build
+FROM golang:1.24-alpine3.22 AS build
+
+
+# Install necessary packages
 RUN apk --no-cache add gcc g++ make ca-certificates
-WORKDIR /app
+
+
+# Set working directory inside the container
+WORKDIR /go/src/Microservices-based-E-commerce-System
+
+
+# Copy module files and source code
 COPY go.mod go.sum ./
-COPY vendor vendor
+# COPY vendor vendor
 COPY account account
 COPY catalog catalog
 COPY order order
-RUN GO111MODULE=on go build -mod vendor -o /go/bin/app ./catalog/cmd/catalog
 
-FROM alpine:3.11
+
+# Build the application using vendored dependencies
+RUN GO111MODULE=on go build -o /go/bin/app ./order/cmd/order
+
+
+# Runtime stage
+FROM alpine:3.18
+
+
+# Create a non-root user for better security
+RUN addgroup -S app && adduser -S app -G app
+
+
 WORKDIR /usr/bin
-COPY --from=build /go/bin .
+
+
+# Copy the built binary from the build stage
+COPY --from=build /go/bin/app .
+
+
+# Use non-root user
+USER app
+
+
+# Expose application port
 EXPOSE 8080
+
+
+# Run the binary
 CMD ["app"]
+
+
