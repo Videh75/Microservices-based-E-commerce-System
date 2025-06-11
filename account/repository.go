@@ -55,10 +55,7 @@ func (r *postgresRepository) PutAccount(ctx context.Context, a Account) error {
 
 // Queries a single account by ID
 func (r *postgresRepository) GetAccountByID(ctx context.Context, id string) (*Account, error) {
-	row, err := r.db.QueryContext(ctx, "SELECT id, name FROM accounts WHERE id = $1", id)
-	if err != nil {
-		return nil, err
-	}
+	row := r.db.QueryRowContext(ctx, "SELECT id, name FROM accounts WHERE id = $1", id)
 	a := &Account{}
 	if err := row.Scan(&a.ID, &a.Name); err != nil {
 		return nil, err

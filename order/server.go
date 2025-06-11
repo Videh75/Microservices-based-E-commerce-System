@@ -85,7 +85,6 @@ func (s *grpcServer) PostOrder(ctx context.Context, r *pb.PostOrderRequest) (*pb
 			Price:       p.Price,
 			Quantity:    0, // Initially 0 - we will set correct quantity next
 		}
-		products = append(products, product)
 		// Match this product with request product to get correct quantity
 		for _, rp := range r.Products {
 			if rp.ProductId == p.ID {

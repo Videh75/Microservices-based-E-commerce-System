@@ -288,7 +288,7 @@ PostgreSQL can be accessed and used via CLI (Command Line Interface)
 After the app is up and running, in the terminal follow the below commands:
 
 ```
-docker exec -it <container_id_for_accountDB> psql -U <db_username> -d <db_name>
+docker exec -it <container_id_for_orderDB> psql -U <db_username> -d <db_name>
 ```
 
 Once you are in the PostgreSQL CLI, use the following commands:
