@@ -1,6 +1,6 @@
 # Microservices Driven E-Commerce System
 
-A secure, scalable, and modular **E-commerce backend system** using a **microservices-based architecture**. The system is developed in **Go** and leverages modern tools like **gRPC**, **GraphQL**, **Docker**, **PostgreSQL**, and **Elasticsearch**.
+A secure, scalable, and modular **E-commerce backend system** using a **microservices-based architecture**. The system is developed in **Go** and leverages modern tools like **gRPC**, **GraphQL**, **Docker**, **PostgreSQL**, and **ElasticSearch**.
 
 ## Overview
 
